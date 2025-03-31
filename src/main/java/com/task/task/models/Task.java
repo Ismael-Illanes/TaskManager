@@ -1,4 +1,4 @@
-package com.todo.todo.models;
+package com.task.task.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

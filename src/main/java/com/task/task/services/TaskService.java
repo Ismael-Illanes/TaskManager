@@ -1,10 +1,10 @@
-package com.todo.todo.services;
+package com.task.task.services;
 
 import java.util.List;
 
-import com.todo.todo.models.Task;
+import com.task.task.models.Task;
 
-public interface TodoService {
+public interface TaskService {
     void addTask(String title, String description, boolean done);
 
     void deleteTask(Long id);
