@@ -47,8 +47,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" prefHeight="684.0" prefWidth="943.0" style="-fx-background-color: black;"
-  stylesheets="/styles/style.css" xmlns="http://javafx.com/javafx/23.0.1"
+<VBox alignment="CENTER" prefHeight="700.0" prefWidth="950.0" style="-fx-background-color: black;"
+  stylesheets="@styles/style.css" xmlns="http://javafx.com/javafx/23.0.1"
   xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="com.task.task.controllers.TaskManagerController">
   <children>
@@ -56,15 +56,15 @@
       style="-fx-background-color: black;" VBox.vgrow="ALWAYS">
       <children>
         <TableView fx:id="tblTasks" layoutX="38.0" layoutY="196.0" prefHeight="457.0"
-          prefWidth="868.0" style="-fx-background-color: black; -fx-border-color: black;">
+          prefWidth="869.0" style="-fx-background-color: black; -fx-border-color: black;">
           <columns>
-            <TableColumn fx:id="colID" editable="false" prefWidth="75.0"
-              style="-fx-background-color: black; -fx-text-fill: red;" text="ID" />
-            <TableColumn fx:id="colName" editable="false" prefWidth="103.0"
+            <TableColumn fx:id="colID" resizable="false" editable="false" prefWidth="75.0"
+              style="-fx-background-color: black;" text="ID" />
+            <TableColumn fx:id="colName" resizable="false" editable="false" prefWidth="103.0"
               style="-fx-background-color: black;" text="Name" />
-            <TableColumn fx:id="colDescription" editable="false" prefWidth="625.0" sortable="false"
+            <TableColumn fx:id="colDescription" resizable="false" editable="false" prefWidth="625.0" sortable="false"
               style="-fx-background-color: black;" text="Description" />
-            <TableColumn fx:id="colDone" editable="false" minWidth="0.0" prefWidth="61.0"
+            <TableColumn fx:id="colDone" resizable="false" editable="false" minWidth="0.0" prefWidth="61.0"
               style="-fx-background-color: black;" text="Done" />
           </columns>
           <opaqueInsets>
@@ -86,7 +86,7 @@
         <Button fx:id="btnCreate" layoutX="104.0" layoutY="56.0" mnemonicParsing="false"
           prefHeight="98.0" prefWidth="228.0"
           style="-fx-border-color: wheat; -fx-border-width: 2px; -fx-background-color: black;"
-          text="Create task" textFill="GHOSTWHITE">
+          text="Create task" textFill="GHOSTWHITE" onAction="#openCreateTask">
           <font>
             <Font size="20.0" />
           </font>

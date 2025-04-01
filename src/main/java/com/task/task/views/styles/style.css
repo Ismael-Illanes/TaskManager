@@ -2,7 +2,7 @@
     -fx-text-fill: ghostwhite;
 }
 
-/* Borde horizontal en la cabecera */
+
 .table-view .column-header-background {
     -fx-border-color: wheat;
     border-color: wheat;
@@ -22,7 +22,12 @@
 .table-view .table-row-cell {
     -fx-border-color: wheat;
     border-color: wheat;
-    -fx-border-width: 0px 0px 1px 0px;
+    -fx-border-width: 0px 0px 1px 1px;
     border-width: 0px 0px 1px 0px;
 
+}
+
+.table-row-cell{
+    -fx-text-fill:ghostwhite;
+    -fx-cell-size: 40px;
 }
