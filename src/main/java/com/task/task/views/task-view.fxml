@@ -62,9 +62,11 @@
               style="-fx-background-color: black;" text="ID" />
             <TableColumn fx:id="colName" resizable="false" editable="false" prefWidth="103.0"
               style="-fx-background-color: black;" text="Name" />
-            <TableColumn fx:id="colDescription" resizable="false" editable="false" prefWidth="625.0" sortable="false"
+            <TableColumn fx:id="colDescription" resizable="false" editable="false" prefWidth="625.0"
+              sortable="false"
               style="-fx-background-color: black;" text="Description" />
-            <TableColumn fx:id="colDone" resizable="false" editable="false" minWidth="0.0" prefWidth="61.0"
+            <TableColumn fx:id="colDone" resizable="false" editable="false" minWidth="0.0"
+              prefWidth="61.0"
               style="-fx-background-color: black;" text="Done" />
           </columns>
           <opaqueInsets>

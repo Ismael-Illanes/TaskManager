@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import com.task.task.models.Task;
 import com.task.task.repository.TaskRepository;
-import com.task.task.services.TaskServiceImpl;
 
 import java.io.IOException;
 
@@ -56,9 +56,6 @@ public class TaskManagerController {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private TaskServiceImpl taskServiceImpl;
-
-    @Autowired
     private TaskRepository taskRepository;
 
     private ObservableList<Task> taskList = FXCollections.observableArrayList();
@@ -71,9 +68,13 @@ public class TaskManagerController {
                 .setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getDescription()));
         colDone.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().isDone()));
 
-        loadExampleTasks();
-
         tblTasks.setItems(taskList);
+
+        // Listener para que el TextField detecte los cambios a la hora de simplemente
+        // escribir
+        txtID.textProperty().addListener((_, _, _) -> {
+            searchById();
+        });
 
         // Listener para la selección del item en la tabla
         tblTasks.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {
@@ -94,24 +95,49 @@ public class TaskManagerController {
 
             return row;
         });
+
+
     }
 
     public void getSelectedTask() {
         Task selectedTask = tblTasks.getSelectionModel().getSelectedItem();
         if (selectedTask != null) {
+            // Aqui se debería de abrir el formulario de edición de la tarea
             System.out.println(selectedTask.getId() + " " + selectedTask.getTitle() + " "
                     + selectedTask.getDescription() + " " + selectedTask.isDone());
         }
     }
 
-    private void loadExampleTasks() {
-        Task exampleTask = new Task("Tarea de prueba", "Descripción de prueba", false);
-        Task exampleTask2 = new Task("wqweewe de prueba", "Descripción de prueba", false);
-        taskRepository.save(exampleTask);
-        taskRepository.save(exampleTask2);
-        taskList.add(exampleTask);
-        taskList.add(exampleTask2);
+    public void addTask(Task task) {
+        taskRepository.save(task);
+        taskList.add(task);
         tblTasks.setItems(taskList);
+    }
+
+    public void removeTask(Task task) {
+        taskRepository.delete(task);
+        taskList.remove(task);
+        tblTasks.setItems(taskList);
+    }
+
+    public void searchById() {
+        String idText = txtID.getText();
+        if (idText != null && !idText.isEmpty()) {
+            try {
+                ObservableList<Task> taskListIDFilteredTasks = FXCollections.observableArrayList();
+                for (Task task : taskList) {
+                    if (task.getId().toString().startsWith(idText)) {
+                        taskListIDFilteredTasks.add(task);
+                    }
+                }
+
+                tblTasks.setItems(taskListIDFilteredTasks);
+            } catch (NumberFormatException e) {
+                System.out.println("ID no válido");
+            }
+        } else {
+            tblTasks.setItems(taskList);
+        }
     }
 
     public void showStage() {
@@ -129,7 +155,16 @@ public class TaskManagerController {
         }
     }
 
-    public void openCreateTask() {
-        System.out.println(this.taskServiceImpl.getAllTasks());
+    public void openCreateTask() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/task/task/views/form-create-task.fxml"));
+        loader.setControllerFactory(applicationContext::getBean);
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        stage.setTitle("Create new task");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.initModality(Modality.WINDOW_MODAL);
+        stage.initOwner(tblTasks.getScene().getWindow());
+        stage.showAndWait();
     }
 }
