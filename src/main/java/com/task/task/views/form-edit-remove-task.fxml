@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" style="-fx-background-color: black;"
+   xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+   fx:controller="com.task.task.controllers.EditRemoveTaskController">
+   <children>
+      <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0"
+         VBox.vgrow="ALWAYS">
+         <children>
+            <GridPane layoutY="14.0" prefHeight="172.0" prefWidth="620.0"
+               AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="0.0"
+               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.0" minWidth="10.0"
+                     prefWidth="195.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="429.0" minWidth="10.0"
+                     prefWidth="425.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints fx:id="rwId" maxHeight="71.0" minHeight="10.0" prefHeight="60.0" />
+                  <RowConstraints fx:id="rwTitle" maxHeight="85.0" minHeight="0.0" prefHeight="60.0"
+                     vgrow="SOMETIMES" />
+                  <RowConstraints fx:id="rwDescription" maxHeight="180.0" minHeight="10.0"
+                     prefHeight="140.0" vgrow="SOMETIMES" />
+                  <RowConstraints fx:id="rwDone" minHeight="10.0" prefHeight="30.0"
+                     vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label prefHeight="89.0" prefWidth="310.0" text="Task ID" textFill="GHOSTWHITE">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Label>
+                  <Label prefHeight="89.0" prefWidth="310.0" text="Task Title" textFill="GHOSTWHITE"
+                     GridPane.rowIndex="1">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="89.0" prefWidth="310.0" text="Task Description"
+                     textFill="GHOSTWHITE" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="89.0" prefWidth="310.0" text="Task is done"
+                     textFill="GHOSTWHITE" GridPane.rowIndex="3">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtTitle" maxHeight="-Infinity" maxWidth="-Infinity"
+                     minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="425.0"
+                     GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="txtID" alignment="CENTER" disable="true" editable="false"
+                     maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                     minWidth="-Infinity" prefHeight="46.0" prefWidth="425.0"
+                     GridPane.columnIndex="1">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextField>
+                  <HBox alignment="CENTER" prefHeight="35.0" prefWidth="425.0" spacing="50.0"
+                     GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <children>
+                        <RadioButton fx:id="rbDone" mnemonicParsing="false" text="Done"
+                           textFill="GHOSTWHITE">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="isDone" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="rbToDo" mnemonicParsing="false"
+                           text="To do" textFill="GHOSTWHITE" toggleGroup="$isDone">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <TextArea fx:id="txtDescription" prefHeight="200.0" prefWidth="200.0"
+                     wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextArea>
+               </children>
+            </GridPane>
+            <HBox alignment="CENTER" layoutX="12.0" layoutY="325.0" prefHeight="41.0"
+               prefWidth="597.0" spacing="50.0">
+               <children>
+                  <Button fx:id="btnCreateTask" mnemonicParsing="false" onAction="#modifyTask"
+                     prefHeight="44.0" prefWidth="133.0"
+                     style="-fx-background-color: black; -fx-border-width: 1px; -fx-border-color: ghostwhite; -fx-border-radius: 5px;"
+                     text="Modify task" textAlignment="CENTER" textFill="GHOSTWHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnDeleteTask" mnemonicParsing="false" onAction="#deleteTask"
+                     prefHeight="44.0" prefWidth="133.0"
+                     style="-fx-background-color: black; -fx-border-width: 1px; -fx-border-color: ghostwhite; -fx-border-radius: 5px;"
+                     text="Delete task" textAlignment="CENTER" textFill="GHOSTWHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false"
+                     prefHeight="46.0" prefWidth="87.0"
+                     style="-fx-background-color: black; -fx-border-width: 1px; -fx-border-color: ghostwhite; -fx-border-radius: 5px;"
+                     text="Cancel" textAlignment="CENTER" textFill="GHOSTWHITE"
+                     onAction="#closeWindow">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+   <rotationAxis>
+      <Point3D />
+   </rotationAxis>
+</VBox>

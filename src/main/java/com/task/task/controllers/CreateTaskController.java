@@ -108,11 +108,18 @@ public class CreateTaskController {
                 .addTask(new Task(title = txtTitle.getText().trim(), description = txtDescription.getText().trim(),
                         isTaskDone = rbDone.isSelected()));
 
-        System.out.println("Task Created: " + title + " | " + description + " | Done: "
-                + (isTaskDone ? "Completed" : "Incomplete"));
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText(
+                "Task Created: " + "\n" + "Title: " + title + "\n" + "Description: " + description + "\n" + "Done: "
+                        + (isTaskDone ? "Completed" : "Incomplete"));
+
+        alert.showAndWait();
 
         txtTitle.clear();
         txtDescription.clear();
+        closeWindow();
     }
 
     public void closeWindow() {

@@ -1,5 +1,6 @@
 package com.task.task.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -59,6 +60,7 @@ public class TaskManagerController {
     private TaskRepository taskRepository;
 
     private ObservableList<Task> taskList = FXCollections.observableArrayList();
+    private boolean isClearingSelection = false;
 
     @FXML
     public void initialize() {
@@ -69,6 +71,7 @@ public class TaskManagerController {
         colDone.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().isDone()));
 
         tblTasks.setItems(taskList);
+        loadTasks();
 
         // Listener para que el TextField detecte los cambios a la hora de simplemente
         // escribir
@@ -78,40 +81,40 @@ public class TaskManagerController {
 
         // Listener para la selección del item en la tabla
         tblTasks.getSelectionModel().selectedItemProperty().addListener((_, _, newValue) -> {
-            if (newValue != null) {
-                getSelectedTask();
+            if (!isClearingSelection) {
+                if (newValue != null) {
+                    System.out.println("Tarea seleccionada: " + newValue.getTitle());
+                    try {
+                        getSelectedTask(newValue);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    System.out.println("No hay selección");
+                }
             }
         });
 
-        // Detectar cuando el ratón entra o sale de una fila específica
-        tblTasks.setRowFactory(_ -> {
-            TableRow<Task> row = new TableRow<>();
-
-            row.setOnMouseExited(_ -> {
-                if (!row.isEmpty()) {
-                    tblTasks.getSelectionModel().clearSelection(row.getIndex());
-                }
-            });
-
-            return row;
-        });
-
-
+        System.out.println("Número de tareas en la tabla: " + taskList.size());
     }
 
-    public void getSelectedTask() {
-        Task selectedTask = tblTasks.getSelectionModel().getSelectedItem();
-        if (selectedTask != null) {
-            // Aqui se debería de abrir el formulario de edición de la tarea
-            System.out.println(selectedTask.getId() + " " + selectedTask.getTitle() + " "
-                    + selectedTask.getDescription() + " " + selectedTask.isDone());
+    private void loadTasks() {
+        taskList.setAll(taskRepository.findAll());
+    }
+
+    public Task getSelectedTask(Task task) throws IOException {
+        if (task != null) {
+            System.out.println("Tarea obtenida: " + task.getTitle());
+            openEditRemoveTaskForm(task);
         }
+        return null;
     }
 
     public void addTask(Task task) {
         taskRepository.save(task);
         taskList.add(task);
         tblTasks.setItems(taskList);
+        System.out.println(tblTasks.getItems().size());
     }
 
     public void removeTask(Task task) {
@@ -130,7 +133,6 @@ public class TaskManagerController {
                         taskListIDFilteredTasks.add(task);
                     }
                 }
-
                 tblTasks.setItems(taskListIDFilteredTasks);
             } catch (NumberFormatException e) {
                 System.out.println("ID no válido");
@@ -152,6 +154,43 @@ public class TaskManagerController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void openEditRemoveTaskForm(Task task) throws IOException {
+        Task selectedTask = task;
+        if (selectedTask != null) {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/task/task/views/form-edit-remove-task.fxml"));
+            loader.setControllerFactory(applicationContext::getBean);
+            Parent root = loader.load();
+
+            EditRemoveTaskController controller = loader.getController();
+            controller.setTask(selectedTask);
+
+            Stage stage = new Stage();
+            stage.setTitle("Edit or remove task");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(tblTasks.getScene().getWindow());
+            // setOnHidden es para que haga una tarea tras finalizar el cierre total del
+            // modal y se haya iniciado correctamente el main view
+            stage.setOnHidden(_ -> {
+                Platform.runLater(() -> {
+                    isClearingSelection = true;
+                    tblTasks.getSelectionModel().clearSelection();
+                    isClearingSelection = false;
+                });
+            });
+            stage.showAndWait();
+        } else {
+            System.out.println("No hay tarea seleccionada");
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Advertencia");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor, selecciona una tarea antes de editar.");
+            alert.showAndWait();
         }
     }
 
