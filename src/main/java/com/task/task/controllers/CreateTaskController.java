@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.task.task.models.Task;
+import com.task.task.utils.StringUtils;
+import com.task.task.utils.textValidator;
 
 import javafx.event.ActionEvent;
 
@@ -56,36 +58,12 @@ public class CreateTaskController {
 
     @FXML
     public void initialize() {
-        isDone = new ToggleGroup();
-        rbDone.setToggleGroup(isDone);
-        rbToDo.setToggleGroup(isDone);
+
         rbToDo.setSelected(true);
 
-        txtDescription.textProperty().addListener((_, _, newText) -> {
-            String untrimmedText = newText;
+        textValidator.maxCharacters(txtDescription, lblDescriptionErrorMessage, 100);
 
-            if (untrimmedText.length() > 100) {
-                untrimmedText = untrimmedText.substring(0, 100);
-                txtDescription.setText(untrimmedText);
-
-                lblDescriptionErrorMessage.setVisible(true);
-            } else {
-                lblDescriptionErrorMessage.setVisible(false);
-            }
-        });
-
-        txtTitle.textProperty().addListener((_, _, newText) -> {
-            String untrimmedText = newText;
-
-            if (untrimmedText.length() > 25) {
-                untrimmedText = untrimmedText.substring(0, 25);
-                txtTitle.setText(untrimmedText);
-
-                lblTitleErrorMessage.setVisible(true);
-            } else {
-                lblTitleErrorMessage.setVisible(false);
-            }
-        });
+        textValidator.maxCharacters(txtTitle, lblTitleErrorMessage, 25);
 
     }
 
@@ -105,7 +83,8 @@ public class CreateTaskController {
             return;
         }
         this.taskManagerController
-                .addTask(new Task(title = txtTitle.getText().trim(), description = txtDescription.getText().trim(),
+                .addTask(new Task(title = StringUtils.normalizeWhitespace(txtTitle.getText().trim()),
+                        description = StringUtils.normalizeWhitespace(txtDescription.getText().trim()),
                         isTaskDone = rbDone.isSelected()));
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

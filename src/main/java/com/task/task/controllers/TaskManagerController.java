@@ -117,7 +117,7 @@ public class TaskManagerController {
         System.out.println(tblTasks.getItems().size());
     }
 
-    public void removeTask(Task task) {
+    public void deleteTask(Task task) {
         taskRepository.delete(task);
         taskList.remove(task);
         tblTasks.setItems(taskList);
@@ -164,7 +164,9 @@ public class TaskManagerController {
                     getClass().getResource("/com/task/task/views/form-edit-remove-task.fxml"));
             loader.setControllerFactory(applicationContext::getBean);
             Parent root = loader.load();
-
+            // Cargar el controlador de la vista de edición y eliminación de tareas de otra
+            // diferente
+            // forma a como se carga en CreateTaskController
             EditRemoveTaskController controller = loader.getController();
             controller.setTask(selectedTask);
 
@@ -181,6 +183,7 @@ public class TaskManagerController {
                     isClearingSelection = true;
                     tblTasks.getSelectionModel().clearSelection();
                     isClearingSelection = false;
+                    loadTasks();
                 });
             });
             stage.showAndWait();
@@ -206,4 +209,5 @@ public class TaskManagerController {
         stage.initOwner(tblTasks.getScene().getWindow());
         stage.showAndWait();
     }
+
 }
